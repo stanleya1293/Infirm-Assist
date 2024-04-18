@@ -13,6 +13,7 @@ const Button = (props) => {
 }
 
 const FieldEntry = (props) => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [ssn, setSsn] = useState('');
@@ -94,9 +95,13 @@ function WelcomePage() {
 }
 
 function PatientEntryPage() {
+  const navigate = useNavigate();
+  const NavigateToHome = () => {
+    navigate('/Home');
+  };
   return (
     <body>
-      <h1 className="companyTitle">InfirmAssist</h1>
+      <h1 className="companyTitle" onClick={NavigateToHome}>InfirmAssist</h1>
       <h2 className="infoText">Patient Entry</h2>
       <span>
         <FieldEntry/>

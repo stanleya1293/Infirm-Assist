@@ -60,7 +60,7 @@ body {
 }
 .content h2{
   font-size: 40px;
-  margin-top: 80px;
+  margin-top: 125px;
 }
 
 .content p{
@@ -103,7 +103,7 @@ button:hover .spoon{
 }
 
 button:hover{
-  border: none;
+  border: absolute;
 }
 
 .infoText {
