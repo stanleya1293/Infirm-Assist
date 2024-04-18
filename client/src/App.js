@@ -1,29 +1,51 @@
 import './App.css';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Routes, useNavigate} from 'react-router-dom'
+import {useState, useEffect} from 'react'
 
 
 const Button = (props) => {
+  const navigate = useNavigate();
   return (
-    <form action={props.redirect}>
-      <button type='submit'><span className="spoon"></span>{props.text}</button>
+    <form>
+      <button onClick = {() => navigate(props.redirect)}><span className="spoon"></span>{props.text}</button>
     </form>
   )
 }
 
 const FieldEntry = (props) => {
-  let Fields = [];
-  for (let i = 0; i < props.fields.length; i++) {
-    Fields.push(
-    <>
-      <h3 className="inputDescription">{props.text[i]}</h3>
-      <input type='text' name={props.fields[i]}></input>
-    </>
-    )
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [ssn, setSsn] = useState('');
+  const [doa, setDoa] = useState('');
+  const [dob, setDob] = useState('');
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const Patient = {firstName, lastName, ssn, dob, doa};
+    console.log(JSON.stringify(Patient))
+    fetch('http://localhost:3000/PatientSubmit', {
+      method: 'POST',
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(Patient)
+    })
   }
   return (
-    <form className="inputField" action='/' method="post">
-      {Fields}
-      <Button text = "Submit"/>
+    <form className="inputField" onSubmit = {handleSubmit}>
+      <h3 className="inputDescription">First Name</h3>
+      <input type='text' required value={firstName} onChange={(e) => setFirstName(e.target.value)}></input>
+
+      <h3 className="inputDescription">Last Name</h3>
+      <input type='text' required value={lastName} onChange={(e) => setLastName(e.target.value)}></input>
+
+      <h3 className="inputDescription">SSN</h3>
+      <input type='text' required value={ssn} onChange={(e) => setSsn(e.target.value)}></input>
+
+      <h3 className="inputDescription">Date of Birth</h3>
+      <input type='text' required value={dob} onChange={(e) => setDob(e.target.value)}></input>
+
+      <h3 className="inputDescription">Date of Admittance</h3>
+      <input type='text' required value={doa} onChange={(e) => setDoa(e.target.value)}></input>
+
+      <button type="submit"><span className="spoon"></span>Submit</button>
     </form>
   )
 }
@@ -75,33 +97,25 @@ function WelcomePage() {
 }
 
 function PatientEntryPage() {
-  const Fields = [
-    "Fname",
-    "Lname",
-    "SSN",
-    "DOA",
-    "DOB"
-  ]
-  const Text = [
-    "First Name",
-    "Last Name",
-    "Social Security Number",
-    "Date of Admittance",
-    "Date of Birth"
-  ]
   return (
     <body>
       <h1 className="companyTitle">InfirmAssist</h1>
       <h2 className="infoText">Patient Entry</h2>
       <span>
-        <FieldEntry fields = {Fields} text = {Text}/>
+        <FieldEntry/>
       </span>
     </body>
   );
 }
 
 function PatientDirectoryPage(){
-  //let data = fetch("/patientData").then((res) => {return res.json()});
+useEffect(() => {
+  fetch('http://localhost:3000/LoadPatients').then(res => {
+    return res.json();
+  }).then((data) => {
+    console.log(data);
+  })
+})
 return(
   <body>
     <div className="container">
