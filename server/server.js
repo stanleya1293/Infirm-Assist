@@ -4,6 +4,7 @@ const port = 3000
 
 let indexPath = require('path');
 let mysql = require('mysql2');
+const { Console } = require('console');
 
 let db = mysql.createConnection({
     host: '127.0.0.1',
@@ -19,9 +20,14 @@ server.use(express.static(__dirname + "/../client/build"));
 server.use(express.json());
 server.use(express.urlencoded());
 
-server.get('*', (req, res) => {
-    res.sendFile(indexPath.resolve(__dirname + '/../client/build/index.html'))
+server.get('/', (req, res) => {
+    //res.sendFile(indexPath.resolve(__dirname + '/../client/build/index.html'))
 });
+
+server.get('/PatientDirectory', (req, res) => {
+    //res.sendFile(indexPath.resolve(__dirname + '/../client/build/index.html'))
+});
+
 
 server.post('/PatientSubmit', (req, res) => {
     let data = req.body;
@@ -39,6 +45,21 @@ server.post('/PatientSubmit', (req, res) => {
         });
     }); */
 });
+
+server.get('/PatientLoad', (req, res) => {
+    /*db.connect((err) => {
+        if (err) throw errorMonitor;
+        db.query(`DELETE FROM PATIENT`)
+        console.log("DELETED!!!!")
+    }) */
+    db.connect((err) => {
+        if (err) throw err;
+        db.query(`SELECT * FROM PATIENT`, (err, results) => {
+            console.log(results)
+            res.json(results)
+        })
+    })
+})
 
 server.listen(port, () => {
     console.log(`Listening at http://localhost:${port}`)

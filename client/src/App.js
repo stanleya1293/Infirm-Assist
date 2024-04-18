@@ -21,7 +21,6 @@ const FieldEntry = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const Patient = {firstName, lastName, ssn, dob, doa};
-    console.log(JSON.stringify(Patient))
     fetch('http://localhost:3000/PatientSubmit', {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
@@ -59,24 +58,22 @@ const NavBar = () => {
   )
 }
 
-const PatientItem = (props) => {
-  return (
-    <div className="patientItem">
-      <h3>{props.items}</h3>
-      <p>{props.items}</p>
-      <p>{props.items}</p>
-    </div>
-  )
-}
 
-const PatientList = (props) => {
-  let ItemList = [];
-  for (let i = 0; i < props.items.length; i++) {
-    ItemList.push(<PatientItem items = {props.items}/>);
-  }
+
+const PatientList = ({patients}) => {
   return (
     <div className="patientList">
-      {ItemList}
+      {patients.map((patient) => { 
+      return(
+      <div className="patientItem" key={patient.id}>
+        <h3>Name: {patient.Fname} {patient.Lname}</h3>
+        <p>SSN: {patient.ssn}</p>
+        <p>Date of Admittance: {patient.doa}</p>
+        <p>Date of Birth: {patient.dob}</p>
+      </div>
+      )
+      })
+      }
     </div>
   )
 }
@@ -109,31 +106,62 @@ function PatientEntryPage() {
 }
 
 function PatientDirectoryPage(){
+const [patients, setPatients] = useState(null);
 useEffect(() => {
-  fetch('http://localhost:3000/LoadPatients').then(res => {
-    return res.json();
+  fetch('http://localhost:3000/PatientLoad').then((res) => {
+    return res.json()
   }).then((data) => {
-    console.log(data);
+    setPatients(data);
   })
-})
+}, [])
+
 return(
   <body>
     <div className="container">
       <h2 className="infoText">Patient Directory</h2>
       <input type="text" placeholder="Search patients..." className="searchInput"></input>
-      <PatientList items = {[]}/>
+      {patients && <PatientList patients = {patients}/>}
     </div>
   </body>
 );
 }
 
+function LoginForm(){
+  const navigate = useNavigate();
+  return (
+    <div className="wrapper">
+      <form action="">
+        <h1>Login</h1>
+        <div className="input-box">
+          <input type="text" placeholder="Username" required />
+          <i className='bx bxs-user'></i>
+        </div>
+        <div className="input-box">
+          <input type="password" placeholder="Password" required />
+          <i className='bx bxs-lock-alt'></i>
+        </div>
+        <div className="remember-forgot">
+          <label><input type="checkbox" />Remember Me</label>
+          <a href="#">Forgot Password</a>
+        </div>
+        <form>
+          <button type='submit' onClick = {() => navigate('/Home')}><span className="spoon"></span>Login</button>
+        </form>
+        <div className="register-link">
+          <p>Don't have an account? <a href="#">Register</a></p>
+        </div>
+      </form>
+    </div>
+  );
+}
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<WelcomePage />} />
+        <Route path='/' element={<LoginForm />} />
+        <Route path='/Home' element={<WelcomePage/>}/>
         <Route path='/PatientEntry' element={<PatientEntryPage/>} />
         <Route path='/PatientDirectory' element={<PatientDirectoryPage/>} />
       </Routes>
