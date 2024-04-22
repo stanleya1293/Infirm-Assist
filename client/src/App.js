@@ -133,6 +133,9 @@ return(
 
 function LoginForm(){
   const navigate = useNavigate();
+  const NavigateToLogin = () => {
+    navigate('/RegisterPage');
+  }
   return (
     <div className="wrapper">
       <form action="">
@@ -153,8 +156,34 @@ function LoginForm(){
           <button type='submit' onClick = {() => navigate('/Home')}><span className="spoon"></span>Login</button>
         </form>
         <div className="register-link">
-          <p>Don't have an account? <a href="#">Register</a></p>
+          <p>Don't have an account? <a href="#" onClick={NavigateToLogin}>Register</a></p>
         </div>
+      </form>
+    </div>
+  );
+}
+
+function RegisterForm(){
+  const navigate = useNavigate();
+  return (
+    <div className="wrapper">
+      <form action="">
+        <h1>Register</h1>
+        <div className="input-box">
+          <input type="text" placeholder="Username" required />
+          <i className='bx bxs-user'></i>
+        </div>
+        <div className="input-box">
+          <input type="email" placeholder="Email" required />
+          <i className='bx bxs-lock-alt'></i>
+        </div>
+        <div className="input-box">
+          <input type="password" placeholder="Password" required />
+          <i className='bx bxs-lock-alt'></i>
+        </div>
+        <form>
+          <button type='submit' onClick = {() => navigate('/')}><span className="spoon"></span>Register</button>
+        </form>
       </form>
     </div>
   );
@@ -169,6 +198,7 @@ function App() {
         <Route path='/Home' element={<WelcomePage/>}/>
         <Route path='/PatientEntry' element={<PatientEntryPage/>} />
         <Route path='/PatientDirectory' element={<PatientDirectoryPage/>} />
+        <Route path='/RegisterPage' element={<RegisterForm/>} />
       </Routes>
     </Router>
   );
