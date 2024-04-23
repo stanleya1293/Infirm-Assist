@@ -112,6 +112,10 @@ function PatientEntryPage() {
 }
 
 function PatientDirectoryPage(){
+  const navigate = useNavigate();
+  const NavigateToHome = () => {
+    navigate('/Home');
+  };
 const [patients, setPatients] = useState(null);
 useEffect(() => {
   fetch('http://localhost:3000/PatientLoad').then((res) => {
@@ -123,6 +127,7 @@ useEffect(() => {
 
 return(
   <body>
+    <h1 className="companyTitle" onClick={NavigateToHome}>InfirmAssist</h1>
     <div className="container">
       <h2 className="infoText">Patient Directory</h2>
       <input type="text" placeholder="Search patients..." className="searchInput"></input>
@@ -192,6 +197,9 @@ function RegisterForm(){
 
 const RoomPage = () => {
   const navigate = useNavigate();
+  const NavigateToHome = () => {
+    navigate('/Home');
+  };
   const [rooms, setRooms] = useState([]);
 
   // Function to fetch rooms from the backend
@@ -214,6 +222,7 @@ const RoomPage = () => {
 
   return (
     <div className="Room">
+      <h1 className="companyTitle" onClick={NavigateToHome}>InfirmAssist</h1>
       <h2>Rooms</h2>
       <button onClick={handleAddRoom}><span className="spoon"></span>Add Room</button>
       <div className="roomList">
