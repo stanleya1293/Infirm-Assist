@@ -89,6 +89,7 @@ function WelcomePage() {
         <p>CLICK ANYWHERE BELOW TO GET STARTED</p>
         <Button text = "Patient Entry" redirect = "/PatientEntry"/>
         <Button text = "Patient Directory" redirect = "/PatientDirectory"/>
+        <Button text = "Room Assignment" redirect = "/RoomPage"/>
       </div>
     </body>
   );
@@ -189,6 +190,100 @@ function RegisterForm(){
   );
 }
 
+const RoomPage = () => {
+  const navigate = useNavigate();
+  const [rooms, setRooms] = useState([]);
+
+  // Function to fetch rooms from the backend
+  useEffect(() => {
+    fetchRooms();
+  }, []);
+
+  const fetchRooms = () => {
+    fetch('http://localhost:3000/rooms')
+      .then((res) => res.json())
+      .then((data) => {
+        setRooms(data);
+      })
+      .catch((error) => console.error('Error fetching rooms:', error));
+  };
+
+  const handleAddRoom = () => {
+    navigate('/AddRoom');
+  };
+
+  return (
+    <div className="Room">
+      <h2>Rooms</h2>
+      <button onClick={handleAddRoom}><span className="spoon"></span>Add Room</button>
+      <div className="roomList">
+        {rooms.map((room) => (
+          <div className="roomItem" key={room.id}>
+            <h3>Room Number: {room.roomNumber}</h3>
+            <p>Patient: {room.patientName}</p>
+            <p>Doctor: {room.doctorName}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const AddRoomPage = () => {
+  const navigate = useNavigate();
+  const [roomNumber, setRoomNumber] = useState('');
+  const [patientName, setPatientName] = useState('');
+  const [doctorName, setDoctorName] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newRoom = {
+      roomNumber: roomNumber,
+      patientName: patientName,
+      doctorName: doctorName,
+    };
+    // Here you would send the newRoom data to your backend to add it to the database
+    console.log('New Room:', newRoom);
+    navigate('/RoomPage');
+  };
+
+  return (
+    <div className="AddRoomPage">
+      <h2>Add Room</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Room Number:
+          <input
+            type="text"
+            value={roomNumber}
+            onChange={(e) => setRoomNumber(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Patient Name:
+          <input
+            type="text"
+            value={patientName}
+            onChange={(e) => setPatientName(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Doctor Name:
+          <input
+            type="text"
+            value={doctorName}
+            onChange={(e) => setDoctorName(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit"><span className="spoon"></span>Add Room</button>
+      </form>
+    </div>
+  );
+};
+
 
 function App() {
   return (
@@ -199,6 +294,8 @@ function App() {
         <Route path='/PatientEntry' element={<PatientEntryPage/>} />
         <Route path='/PatientDirectory' element={<PatientDirectoryPage/>} />
         <Route path='/RegisterPage' element={<RegisterForm/>} />
+        <Route path='/RoomPage' element={<RoomPage/>} />
+        <Route path="/AddRoom" element={<AddRoomPage />} />
       </Routes>
     </Router>
   );

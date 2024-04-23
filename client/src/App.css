@@ -60,7 +60,7 @@ body {
 }
 .content h2{
   font-size: 40px;
-  margin-top: 125px;
+  margin-top: 50px;
 }
 
 .content p{
@@ -73,7 +73,7 @@ button {
   width: 200px;
   padding: 15px 0;
   text-align: center;
-  margin: 25px 25%;
+  margin: 15px 25%;
   border-radius: 25px;
   font-weight: bold;
   border: 2px solid #009688;
@@ -264,4 +264,49 @@ input {
 
 .wrapper .register-link p a:hover {
   text-decoration: underline;
+}
+
+.Room {
+  text-align: center;
+}
+
+.Room h2 {
+  font-size: 28px;
+  margin-top: 20px;
+  padding-top: 150px;
+}
+
+.roomList {
+  margin-top: 20px;
+}
+
+.roomItem {
+  background: rgba(255, 255, 255, 0.1);
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+}
+
+.roomItem p {
+  margin: 5px 0;
+}
+
+.button-container {
+  margin-top: 20px;
+}
+
+.button-container button {
+  padding: 12px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: #009688;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-container button:hover {
+  background-color: #00796b;
 }
