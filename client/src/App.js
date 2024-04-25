@@ -28,6 +28,7 @@ const FieldEntry = (props) => {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(Patient)
     })
+    navigate('/PatientDirectory');
   }
   return (
     <form className="inputField" onSubmit = {handleSubmit}>
@@ -61,7 +62,7 @@ const FieldEntry = (props) => {
           </select>
         </label> 
 
-      <button type="submit" onClick={() => {navigate('/PatientDirectory')}}><span className="spoon"></span>Submit</button>
+      <button type="submit"><span className="spoon"></span>Submit</button>
     </form>
   )
 }
@@ -85,9 +86,16 @@ const PatientList = ({patients}) => {
       <div className="patientItem" key={patient.id}>
         <h3>Name: {patient.Fname} {patient.Lname}</h3>
         <p>SSN: {patient.ssn}</p>
-        <p>Date of Admittance: {patient.doa}</p>
-        <p>Date of Birth: {patient.dob}</p>
+        <p>Date of Admittance: {patient.dob}</p>
+        <p>Date of Birth: {patient.doa}</p>
         <p>Room Number: {patient.RoomN}</p>
+        <button type='submit' onClick = {() => {fetch('http://localhost:3000/PatientDelete', {
+              method: 'POST',
+              headers: {
+                'content-type': 'application/json',
+              },
+              body: JSON.stringify({ssn: patient.ssn})
+            })}}><span className="spoon"></span>Delete</button>
       </div>
       )
       })
@@ -140,7 +148,7 @@ useEffect(() => {
   }).then((data) => {
     setPatients(data);
   })
-}, [])
+})
 
 return(
   <body>

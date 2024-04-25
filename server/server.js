@@ -36,6 +36,9 @@ server.post('/PatientSubmit', (req, res) => {
             db.query(`INSERT INTO PATIENT (Fname, Lname, ssn, doa, dob, RoomN) VALUES ('${data.firstName}', '${data.lastName}', '${data.ssn}', '${data.doa}', '${data.dob}', '${roomNumber}')`, (err) => {
                 if (err) throw err;
             });
+            db.query(`UPDATE ROOMS SET Status = 1 WHERE (number = ${roomNumber})`, (err) => {
+                if (err) throw err;
+            });
         })
     });
 });
@@ -78,6 +81,14 @@ server.post('/RoomDelete', (req, res) => {
     db.connect((err) => {
         if (err) throw err;
         db.query(`DELETE FROM ROOMS WHERE (number = ${rnum})`)
+    })
+})
+
+server.post('/PatientDelete', (req, res) => {
+    let pssn = req.body.ssn
+    db.connect((err) => {
+        if (err) throw err;
+        db.query(`DELETE FROM PATIENT WHERE (ssn = ${pssn})`)
     })
 })
 
