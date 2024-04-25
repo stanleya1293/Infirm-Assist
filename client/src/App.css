@@ -137,6 +137,18 @@ input {
   padding: 10px 10px 10px 45px;
 }
 
+.dateInput {
+  margin-left: 20%;
+}
+
+select {
+  margin-left: 20%;
+  border: none; 
+  font-size: 1.3em;
+  border-radius: 30px;
+  padding: 10px 10px 10px 45px;
+}
+
 
 
 .container {
@@ -277,7 +289,11 @@ input {
 }
 
 .roomList {
+  height: 500px;
   margin-top: 20px;
+  margin-left: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .roomItem {

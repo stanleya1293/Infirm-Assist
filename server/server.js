@@ -21,15 +21,22 @@ server.use(express.urlencoded());
 server.get('/', (req, res) => {});
 
 server.get('/PatientDirectory', (req, res) => {});
+server.get('AddRoomPage', (req, res) => {});
+server.get('/RoomPage', (req, res) => {});
 
 
 server.post('/PatientSubmit', (req, res) => {
     let data = req.body;
+    let roomNumber = 0;    
     db.connect((err) => {
         if (err) throw err;
-        db.query(`INSERT INTO PATIENT (Fname, Lname, ssn, doa, dob, RoomN) VALUES ('${data.firstName}', '${data.lastName}', '${data.ssn}', '${data.doa}', '${data.dob}', 1)`, (err) => {
+        db.query(`SELECT number FROM ROOMS WHERE (Operation = "${data.operation}")`, (err, results) => {
             if (err) throw err;
-        });
+            roomNumber = results[0].number
+            db.query(`INSERT INTO PATIENT (Fname, Lname, ssn, doa, dob, RoomN) VALUES ('${data.firstName}', '${data.lastName}', '${data.ssn}', '${data.doa}', '${data.dob}', '${roomNumber}')`, (err) => {
+                if (err) throw err;
+            });
+        })
     });
 });
 
@@ -63,6 +70,14 @@ server.get('/rooms', (req, res) => {
         db.query(`SELECT * FROM ROOMS`, (err, results) => {
             res.json(results);
         })
+    })
+})
+
+server.post('/RoomDelete', (req, res) => {
+    let rnum = req.body.roomnum
+    db.connect((err) => {
+        if (err) throw err;
+        db.query(`DELETE FROM ROOMS WHERE (number = ${rnum})`)
     })
 })
 

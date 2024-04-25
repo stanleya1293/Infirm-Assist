@@ -19,9 +19,10 @@ const FieldEntry = (props) => {
   const [ssn, setSsn] = useState('');
   const [doa, setDoa] = useState('');
   const [dob, setDob] = useState('');
+  const [operation, setOperation] = useState('');
   const handleSubmit = (e) => {
     e.preventDefault();
-    const Patient = {firstName, lastName, ssn, dob, doa};
+    const Patient = {firstName, lastName, ssn, dob, doa, operation};
     fetch('http://localhost:3000/PatientSubmit', {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
@@ -40,12 +41,27 @@ const FieldEntry = (props) => {
       <input type='text' required value={ssn} onChange={(e) => setSsn(e.target.value)}></input>
 
       <h3 className="inputDescription">Date of Birth</h3>
-      <input type='text' required value={dob} onChange={(e) => setDob(e.target.value)}></input>
+      <input type='date' className='dateInput' required value={dob} onChange={(e) => setDob(e.target.value)}></input>
 
       <h3 className="inputDescription">Date of Admittance</h3>
-      <input type='text' required value={doa} onChange={(e) => setDoa(e.target.value)}></input>
+      <input type='date' className='dateInput' required value={doa} onChange={(e) => setDoa(e.target.value)}></input>
 
-      <button type="submit"><span className="spoon"></span>Submit</button>
+      <label>
+          Injury Category:
+          <select onChange={(e) => setOperation(e.target.value)}>
+            <option value="Cardiology">Cardiology</option> 
+            <option value="Neurology">Neurology</option> 
+            <option value="Pediatric">Pediatric</option> 
+            <option value="Oncology">Oncology</option> 
+            <option value="Trauma">Trauma</option> 
+            <option value="General">General</option> 
+            <option value="Urology">Urology</option> 
+            <option value="Gynecology">Gynecology</option>    
+            <option value="Gastroenterology">Gastroenterology</option>         
+          </select>
+        </label> 
+
+      <button type="submit" onClick={() => {navigate('/PatientDirectory')}}><span className="spoon"></span>Submit</button>
     </form>
   )
 }
@@ -71,6 +87,7 @@ const PatientList = ({patients}) => {
         <p>SSN: {patient.ssn}</p>
         <p>Date of Admittance: {patient.doa}</p>
         <p>Date of Birth: {patient.dob}</p>
+        <p>Room Number: {patient.RoomN}</p>
       </div>
       )
       })
@@ -203,7 +220,7 @@ const RoomPage = () => {
   const [rooms, setRooms] = useState([]);
   useEffect(() => {
     fetchRooms();
-  }, []);
+  });
 
   const fetchRooms = () => {
     fetch('http://localhost:3000/rooms')
@@ -235,6 +252,13 @@ const RoomPage = () => {
             <h3>Room Number: {room.number}</h3>
             <p>Status: {status}</p>
             <p>Operation: {room.Operation}</p>
+            <button type='submit' onClick = {() => {fetch('http://localhost:3000/RoomDelete', {
+              method: 'POST',
+              headers: {
+                'content-type': 'application/json',
+              },
+              body: JSON.stringify({roomnum: room.number})
+            })}}><span className="spoon"></span>Delete</button>
           </div>
         ))}
       </div>
