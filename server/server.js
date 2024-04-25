@@ -2,9 +2,7 @@ const express = require('express')
 const server = express()
 const port = 3000
 
-let indexPath = require('path');
 let mysql = require('mysql2');
-const { Console } = require('console');
 
 let db = mysql.createConnection({
     host: '127.0.0.1',
@@ -20,30 +18,19 @@ server.use(express.static(__dirname + "/../client/build"));
 server.use(express.json());
 server.use(express.urlencoded());
 
-server.get('/', (req, res) => {
-    //res.sendFile(indexPath.resolve(__dirname + '/../client/build/index.html'))
-});
+server.get('/', (req, res) => {});
 
-server.get('/PatientDirectory', (req, res) => {
-    //res.sendFile(indexPath.resolve(__dirname + '/../client/build/index.html'))
-});
+server.get('/PatientDirectory', (req, res) => {});
 
 
 server.post('/PatientSubmit', (req, res) => {
     let data = req.body;
     db.connect((err) => {
         if (err) throw err;
-        db.query(`INSERT INTO PATIENT (Fname, Lname, ssn, doa, dob) VALUES ('${data.firstName}', '${data.lastName}', '${data.ssn}', '${data.doa}', '${data.dob}')`, (err) => {
+        db.query(`INSERT INTO PATIENT (Fname, Lname, ssn, doa, dob, RoomN) VALUES ('${data.firstName}', '${data.lastName}', '${data.ssn}', '${data.doa}', '${data.dob}', 1)`, (err) => {
             if (err) throw err;
         });
     });
-    /*db.connect((err) => {
-        if (err) throw err;
-        db.query('SELECT * FROM PATIENT', (err, result) => {
-            if (err) throw err;
-            console.log(result);
-        });
-    }); */
 });
 
 server.get('/PatientLoad', (req, res) => {
@@ -55,8 +42,26 @@ server.get('/PatientLoad', (req, res) => {
     db.connect((err) => {
         if (err) throw err;
         db.query(`SELECT * FROM PATIENT`, (err, results) => {
-            console.log(results)
             res.json(results)
+        })
+    })
+})
+
+server.post('/RoomSubmit', (req, res) => {
+    let data = req.body;
+    db.connect((err) => {
+        if (err) throw err;
+        db.query(`INSERT INTO ROOMS (number, Status, Operation) VALUES (${data.number}, ${data.Status}, '${data.Operation}')`, (err) => {
+            if (err) throw err;
+        })
+    })
+})
+
+server.get('/rooms', (req, res) => {
+    db.connect((err) => {
+        if (err) throw err;
+        db.query(`SELECT * FROM ROOMS`, (err, results) => {
+            res.json(results);
         })
     })
 })
