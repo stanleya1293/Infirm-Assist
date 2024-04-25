@@ -5,7 +5,7 @@ const port = 3000
 let mysql = require('mysql2');
 
 let db = mysql.createConnection({
-    host: '127.0.0.1',
+    host: '',
     port: '3306',
     user: 'root', //change this if it is different
     password: 'Awesomearden1234', //change this to password
